@@ -35,8 +35,13 @@ namespace NewspaperSellerModels
             {
                 SimulationCase simulationCase = new SimulationCase();
 
+                //Day
                 simulationCase.DayNo = i;
+
+                //Random newsday
                 simulationCase.RandomNewsDayType = random.Next(1, 101);
+
+                //Newsday
                 int randomDay = simulationCase.RandomNewsDayType;
 
                 if (DayTypeDistributions[0].MinRange <= randomDay && randomDay <= DayTypeDistributions[0].MaxRange)
@@ -46,8 +51,10 @@ namespace NewspaperSellerModels
                 else
                     simulationCase.NewsDayType = Enums.DayType.Poor;
 
+                //Random demand
                 simulationCase.RandomDemand = random.Next(1, 101);
 
+                //Demand
                 for (int row = 0; row < 7; row++)
                 {
                     for (int col = 0; col < 3; col++)
@@ -62,9 +69,10 @@ namespace NewspaperSellerModels
                         }
                     }
                 }
-                simulationCase.DailyCost = NumOfNewspapers * PurchasePrice;
+                //Revenue from sales
                 simulationCase.SalesProfit = Math.Min(NumOfNewspapers, simulationCase.Demand) * SellingPrice;
 
+                //Lost and scrap
                 if (NumOfNewspapers == simulationCase.Demand)
                 {
                     simulationCase.LostProfit = 0;
@@ -82,13 +90,15 @@ namespace NewspaperSellerModels
                     simulationCase.ScrapProfit = 0;
                     PerformanceMeasures.DaysWithMoreDemand++;
                 }
+                //Daily profit
+                simulationCase.DailyCost = NumOfNewspapers * PurchasePrice;
                 simulationCase.DailyNetProfit = simulationCase.SalesProfit - simulationCase.DailyCost - simulationCase.LostProfit + simulationCase.ScrapProfit;
 
                 PerformanceMeasures.TotalSalesProfit += simulationCase.SalesProfit;
                 PerformanceMeasures.TotalCost += simulationCase.DailyCost;
-                PerformanceMeasures.TotalNetProfit += simulationCase.DailyNetProfit;
                 PerformanceMeasures.TotalLostProfit += simulationCase.LostProfit;
                 PerformanceMeasures.TotalScrapProfit += simulationCase.ScrapProfit;
+                PerformanceMeasures.TotalNetProfit += simulationCase.DailyNetProfit;
 
                 SimulationTable.Add(simulationCase);
             }
